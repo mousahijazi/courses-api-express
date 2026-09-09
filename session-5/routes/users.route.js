@@ -1,6 +1,6 @@
 import express from "express";
 import { getAllUsers, register, login } from "../controllers/users.controller.js";
-import { loginValidation } from "../middleware/usersVaLIdation.js";
+import { loginValidation } from "../middleware/usersValidation.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import AppError from "../utils/AppError.js";
 import { FAIL } from "../utils/httpStatusText.js";
