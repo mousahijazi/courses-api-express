@@ -45,15 +45,32 @@ export const addCourse = asyncWrapper(
 export const updateCourse = asyncWrapper(
     async (req, res) => {
         const courseId = req.params.courseId;
-        const updateCourse = await Course.findByIdAndUpdate(courseId, {$set: {...req.body}}, { new: true });
+        const updatedCourse = await Course.findByIdAndUpdate(
+            courseId,
+            { $set: { ...req.body } },
+            { new: true }
+        );
+
+        if (!updatedCourse) {
+            const error = AppError.create("course is not found!", 404, FAIL);
+            return next(error);
+        }
+        
         return res.json({status: SUCCESS, data: {course: updateCourse}});
     }
 )
 
 export const deleteCourse = asyncWrapper(
-    async (req, res) => {
+    async (req, res, next) => {
         const courseId = req.params.courseId;
-        await Course.deleteOne({_id: courseId});
+
+        const result = await Course.deleteOne({_id: courseId});
+
+        if (result.deletedCount === 0) {
+            const error = AppError.create("course is not found!", 404, FAIL);
+            return next(error);
+        }
+
         return res.json({status: SUCCESS, data: null});
     }
 )

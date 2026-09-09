@@ -9,6 +9,11 @@ import mongoose from "mongoose";
 import { ERROR } from "./utils/httpStatusText.js";
 import 'dotenv/config';
 import cors from "cors";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT;
@@ -26,6 +31,8 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use(cors())
 app.use(express.json());
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 app.use("/api/courses", coursesRouter);
 app.use("/api/users", usersRouter);
